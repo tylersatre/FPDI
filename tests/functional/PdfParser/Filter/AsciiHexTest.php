@@ -2,12 +2,13 @@
 
 namespace setasign\Fpdi\functional\PdfParser\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\Filter\AsciiHex;
 
 class AsciiHexTest extends TestCase
 {
-    public function decodeProvider()
+    public static function decodeProvider()
     {
         return [
             ['', ''],
@@ -18,16 +19,14 @@ class AsciiHexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider decodeProvider
-     */
+    #[DataProvider('decodeProvider')]
     public function testDecode($in, $expected)
     {
         $filter = new AsciiHex();
         $this->assertSame($expected, $filter->decode($in));
     }
 
-    public function encodeProvider()
+    public static function encodeProvider()
     {
         return [
             ['', ''],
@@ -36,11 +35,7 @@ class AsciiHexTest extends TestCase
             ["Hallo Welt ", "48616c6c6f2057656c7420"]
         ];
     }
-    /**
-     * @param $in
-     * @param $expected
-     * @dataProvider encodeProvider
-     */
+    #[DataProvider('encodeProvider')]
     public function testEncdoe($in, $expected)
     {
         $filter = new AsciiHex();

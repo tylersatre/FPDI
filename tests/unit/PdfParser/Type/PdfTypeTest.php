@@ -44,7 +44,7 @@ class PdfTypeTest extends TestCase
 
         $mock = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->getMock();
 
         $mock->expects($this->once())
@@ -75,13 +75,15 @@ class PdfTypeTest extends TestCase
 
         $mock = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->getMock();
 
         $mock->expects($this->exactly(2))
             ->method('getIndirectObject')
-            ->withConsecutive([13], [12])
-            ->willReturnOnConsecutiveCalls($indirectObject1, $indirectObject2);
+            ->willReturnMap([
+                [13, false, $indirectObject1],
+                [12, false, $indirectObject2],
+            ]);
 
         $value = PdfIndirectObjectReference::create(13, 0);
         $result = PdfType::resolve($value, $mock);
@@ -106,13 +108,13 @@ class PdfTypeTest extends TestCase
 
         $mock = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->getMock();
 
         $mock->expects($this->exactly(1))
             ->method('getIndirectObject')
-            ->withConsecutive([13])
-            ->willReturnOnConsecutiveCalls($indirectObject1);
+            ->with(13)
+            ->willReturn($indirectObject1);
 
         $value = PdfIndirectObjectReference::create(13, 0);
         $result = PdfType::resolve($value, $mock, true);
@@ -124,7 +126,7 @@ class PdfTypeTest extends TestCase
     {
         $parser = (
             $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getCatalog', 'getIndirectObject'])
+            ->onlyMethods(['getCatalog', 'getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock()
         );

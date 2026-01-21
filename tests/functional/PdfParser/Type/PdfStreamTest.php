@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\functional\PdfParser\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReference;
 use setasign\Fpdi\PdfParser\PdfParser;
@@ -162,12 +163,12 @@ class PdfStreamTest extends TestCase
 
         $xref = $this->getMockBuilder(CrossReference::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->getMock();
 
         $tokenizer = $this->getMockBuilder(Tokenizer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['clearStack'])
+            ->onlyMethods(['clearStack'])
             ->getMock();
 
         $tokenizer->expects($this->exactly(1))
@@ -175,7 +176,7 @@ class PdfStreamTest extends TestCase
 
         $parser = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCrossReference', 'readValue', 'getTokenizer'])
+            ->onlyMethods(['getCrossReference', 'readValue', 'getTokenizer'])
             ->getMock();
 
         $parser->expects($this->exactly(1))
@@ -220,7 +221,7 @@ class PdfStreamTest extends TestCase
 
         $tokenizer = $this->getMockBuilder(Tokenizer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['clearStack'])
+            ->onlyMethods(['clearStack'])
             ->getMock();
 
         $tokenizer->expects($this->exactly(1))
@@ -228,7 +229,7 @@ class PdfStreamTest extends TestCase
 
         $parser = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['readValue', 'getTokenizer'])
+            ->onlyMethods(['readValue', 'getTokenizer'])
             ->getMock();
 
         $parser->expects($this->exactly(1))
@@ -350,7 +351,7 @@ class PdfStreamTest extends TestCase
         $this->assertSame($streamContent, $stream->getStream());
     }
 
-    public function getUnfilteredStreamProvider()
+    public static function getUnfilteredStreamProvider()
     {
         $data = [];
 
@@ -408,12 +409,7 @@ class PdfStreamTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $file
-     * @param $objectNumber
-     * @param $expectedResult
-     * @dataProvider getunfilteredStreamProvider
-     */
+    #[DataProvider('getUnfilteredStreamProvider')]
     public function testGetUnfilteredStream($file, $objectNumber, $expectedResult)
     {
         $reader = StreamReader::createByFile($file);

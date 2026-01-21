@@ -22,7 +22,7 @@ class PageTest extends TestCase
     {
         $page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPageDictionary'])
+            ->onlyMethods(['getPageDictionary'])
             ->getMock();
 
         $dict = PdfDictionary::create([
@@ -70,19 +70,21 @@ class PageTest extends TestCase
         ]);
 
         $parser = $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $parser->expects($this->exactly(2))
             ->method('getIndirectObject')
-            ->withConsecutive([2], [3])
-            ->willReturnOnConsecutiveCalls($pages2, $pages3);
+            ->willReturnMap([
+                [2, false, $pages2],
+                [3, false, $pages3],
+            ]);
 
         $object = PdfIndirectObject::create(1, 0, $dict);
 
         $page = $this->getMockBuilder(Page::class)
-            ->setMethods(['getPageDictionary'])
+            ->onlyMethods(['getPageDictionary'])
             ->setConstructorArgs([$object, $parser])
             ->getMock();
 
@@ -101,7 +103,7 @@ class PageTest extends TestCase
     private function getPageMock($dict, &$parser = null)
     {
         $parser = $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -109,7 +111,7 @@ class PageTest extends TestCase
 
         $page = $this->getMockBuilder(Page::class)
             ->setConstructorArgs([$object, $parser])
-            ->setMethods(['getPageDictionary'])
+            ->onlyMethods(['getPageDictionary'])
             ->getMock();
 
         $page->expects($this->any())
@@ -234,8 +236,10 @@ class PageTest extends TestCase
         $page = $this->getPageMock($dict, $parser);
         $parser->expects($this->exactly(2))
             ->method('getIndirectObject')
-            ->withConsecutive([1], [2])
-            ->willReturnOnConsecutiveCalls($object1, $object2);
+            ->willReturnMap([
+                [1, false, $object1],
+                [2, false, $object2],
+            ]);
 
         $this->assertSame($content1 . "\n" . $content2, $page->getContentStream());
     }

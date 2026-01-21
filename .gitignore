@@ -4,3 +4,4 @@
 /composer.phar
 /tests/visual/**/compare/
 /**/.phpunit.result.cache
+.phpunit.cache/

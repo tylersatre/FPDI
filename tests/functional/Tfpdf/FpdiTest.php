@@ -129,7 +129,7 @@ class FpdiTest extends TestCase
         try {
             unlink($tmpName);
             $this->markTestSkipped('Stream was not locked on this OS.');
-        } catch (\PHPUnit\Framework\Error\Warning $e) {
+        } catch (\ErrorException $e) {
             $pdf->cleanUp();
         }
 

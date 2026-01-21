@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\functional\PdfParser\CrossReference;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\CrossReference\LineReader;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
@@ -10,7 +11,7 @@ use setasign\Fpdi\PdfParser\StreamReader;
 
 class LineReaderTest extends TestCase
 {
-    public function readProvider()
+    public static function readProvider()
     {
         $data = [];
 
@@ -146,12 +147,7 @@ class LineReaderTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $table
-     * @param $expectedOffsets
-     * @param $expectedMaxObjectId
-     * @dataProvider readProvider
-     */
+    #[DataProvider('readProvider')]
     public function testRead($table, $expectedOffsets)
     {
         $reader = StreamReader::createByString($table);
@@ -170,7 +166,7 @@ class LineReaderTest extends TestCase
         new LineReader(new PdfParser($reader));
     }
 
-    public function parseFlexibleWithInvalidDataProvider()
+    public static function parseFlexibleWithInvalidDataProvider()
     {
         $data = [];
 
@@ -195,10 +191,7 @@ class LineReaderTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $table
-     * @dataProvider parseFlexibleWithInvalidDataProvider
-     */
+    #[DataProvider('parseFlexibleWithInvalidDataProvider')]
     public function testParseFlexibleWithInvalidData($table, $expectedExceptionCode)
     {
         $this->expectExceptionCode($expectedExceptionCode);
@@ -207,7 +200,7 @@ class LineReaderTest extends TestCase
         new LineReader(new PdfParser($reader));
     }
 
-    public function getOffsetProvider()
+    public static function getOffsetProvider()
     {
         $data = [];
 
@@ -231,11 +224,7 @@ class LineReaderTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $table
-     * @param $expectedOffsets
-     * @dataProvider getOffsetProvider
-     */
+    #[DataProvider('getOffsetProvider')]
     public function testGetOffset($table, $expectedOffsets)
     {
         $reader = StreamReader::createByString($table);

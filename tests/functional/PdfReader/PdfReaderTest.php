@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\functional\PdfReader;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\PdfParser;
@@ -17,7 +18,7 @@ use setasign\Fpdi\PdfReader\PdfReader;
 
 class PdfReaderTest extends TestCase
 {
-    public function getPageCountProvider()
+    public static function getPageCountProvider()
     {
         $data = [];
         $path = __DIR__ . '/../../_files/pdfs';
@@ -55,11 +56,7 @@ class PdfReaderTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $path
-     * @param $expectedCount
-     * @dataProvider getPageCountProvider
-     */
+    #[DataProvider('getPageCountProvider')]
     public function testGetPageCount($path, $expectedCount)
     {
         $stream = StreamReader::createByFile($path);
@@ -70,7 +67,7 @@ class PdfReaderTest extends TestCase
         $this->assertSame($expectedCount, $pdfReader->getPageCount());
     }
 
-    public function getPageProvider()
+    public static function getPageProvider()
     {
         $data = [];
         $path = __DIR__ . '/../../_files/pdfs';
@@ -1007,11 +1004,7 @@ class PdfReaderTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $path
-     * @param array $expectedResults
-     * @dataProvider getPageProvider
-     */
+    #[DataProvider('getPageProvider')]
     public function testGetPage($path, array $expectedResults)
     {
         $stream = StreamReader::createByFile($path);

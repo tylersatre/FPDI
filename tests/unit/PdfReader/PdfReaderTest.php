@@ -21,7 +21,7 @@ class PdfReaderTest extends TestCase
     {
         $parser = (
             $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getCatalog', 'getIndirectObject'])
+            ->onlyMethods(['getCatalog', 'getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock()
         );
@@ -61,7 +61,7 @@ class PdfReaderTest extends TestCase
     {
         $parser = (
             $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getCatalog', 'getIndirectObject'])
+            ->onlyMethods(['getCatalog', 'getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock()
         );

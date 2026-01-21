@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\functional\PdfParser;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReference;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
@@ -20,7 +21,7 @@ use setasign\Fpdi\PdfParser\Type\PdfString;
 
 class CrossReferenceTest extends TestCase
 {
-    public function handlingProvider()
+    public static function handlingProvider()
     {
         $data = [];
 
@@ -308,12 +309,7 @@ class CrossReferenceTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $string
-     * @param $expectedTrailer
-     * @param $expectedObjects
-     * @dataProvider handlingProvider
-     */
+    #[DataProvider('handlingProvider')]
     public function testHandling($string, $expectedTrailer, $expectedObjects)
     {
         $stream = StreamReader::createByString($string);
@@ -369,7 +365,7 @@ class CrossReferenceTest extends TestCase
     }
 
 
-    public function getIndirectObjectProvider()
+    public static function getIndirectObjectProvider()
     {
         $data = [];
 
@@ -497,11 +493,7 @@ class CrossReferenceTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $filename
-     * @param array $expectedResults
-     * @dataProvider getIndirectObjectProvider
-     */
+    #[DataProvider('getIndirectObjectProvider')]
     public function testGetIndirectObject($filename, array $expectedResults)
     {
         $stream = StreamReader::createByFile($filename);
