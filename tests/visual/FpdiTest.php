@@ -21,7 +21,7 @@ class FpdiTest extends VisualTestCase
         return new Fpdi('P', $unit);
     }
 
-    public function createProvider()
+    public static function createProvider()
     {
         return [
             [

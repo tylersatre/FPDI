@@ -29,8 +29,9 @@ class FpdiTraitTestClass {
     {
         // If the object was not referenced before we need to add an object number here
         if ($value instanceof PdfIndirectObject) {
-            if (!isset($this->objectMap[$this->currentReaderId][$value->objectNumber])) {
-                $this->objectMap[$this->currentReaderId][$value->objectNumber] = ++$this->n;
+            $readerId = $this->currentReaderId ?? '';
+            if (!isset($this->objectMap[$readerId][$value->objectNumber])) {
+                $this->objectMap[$readerId][$value->objectNumber] = ++$this->n;
             }
         }
 

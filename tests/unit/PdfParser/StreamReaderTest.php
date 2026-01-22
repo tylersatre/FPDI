@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\unit\PdfParser;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\StreamReader;
 
@@ -100,7 +101,7 @@ class StreamReaderTest extends TestCase
         $this->assertSame('Unknown', get_resource_type($resource));
     }
 
-    public function stringProvider()
+    public static function stringProvider()
     {
         $longContent = str_repeat('abcd', 10000);
         $moreLinesContent = str_repeat("dasdwaa\nasdasd", 1000);
@@ -113,16 +114,14 @@ class StreamReaderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testGetTotalLength($content)
     {
         $streamReader = StreamReader::createByString($content);
         $this->assertSame(strlen($content), $streamReader->getTotalLength());
     }
 
-    public function resetProvider()
+    public static function resetProvider()
     {
         return [
             ['offset' => null, 'length' =>  10],
@@ -134,20 +133,16 @@ class StreamReaderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider resetProvider
-     */
+    #[DataProvider('resetProvider')]
     public function testReset($offset, $length)
     {
         $content = str_repeat("dasdwaa\r\nasdasd", 1000);
         $streamReader = StreamReader::createByString($content);
         $streamReader->reset($offset, $length);
-        $this->assertSame(substr($content, $offset, $length), $streamReader->getBuffer());
+        $this->assertSame(substr($content, $offset ?? 0, $length), $streamReader->getBuffer());
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testIncreaseLength($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -167,9 +162,7 @@ class StreamReaderTest extends TestCase
         $this->assertFalse($res);
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testGetOffsetAndSetOffset($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -214,9 +207,7 @@ class StreamReaderTest extends TestCase
         $streamReader->addOffset(101);
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testGetBuffer($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -234,9 +225,7 @@ class StreamReaderTest extends TestCase
         $this->assertEquals(substr($content, 0, 200), $streamReader->getBuffer(false));
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testGetBufferLength($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -251,9 +240,7 @@ class StreamReaderTest extends TestCase
         $this->assertEquals(150, $streamReader->getBufferLength(true));
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testReadLine($content)
     {
         $chars = substr($content, 0, 100);
@@ -277,9 +264,7 @@ class StreamReaderTest extends TestCase
         $this->assertFalse($streamReader->readLine(100));
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testGetByte($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -308,9 +293,7 @@ class StreamReaderTest extends TestCase
         $this->assertFalse($byte);
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testReadByte($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -328,9 +311,7 @@ class StreamReaderTest extends TestCase
         $this->assertFalse($streamReader->readByte($streamReader->getTotalLength()));
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testReadByteWithPos($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -350,9 +331,7 @@ class StreamReaderTest extends TestCase
         $this->assertFalse($streamReader->readByte(strlen($content)));
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testReadBytes($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -374,9 +353,7 @@ class StreamReaderTest extends TestCase
         $this->assertEquals(substr($content, $streamReader->getTotalLength()-50), $streamReader->readBytes(50));
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testReadBytesWithPos($content)
     {
         $streamReader = StreamReader::createByString($content);
@@ -393,9 +370,7 @@ class StreamReaderTest extends TestCase
         $this->assertEquals(substr($content, 0, 5), $streamReader->readBytes(5, 0), 'Test 4');
     }
 
-    /**
-     * @dataProvider stringProvider
-     */
+    #[DataProvider('stringProvider')]
     public function testEnsureContent($content)
     {
         $streamReader = StreamReader::createByString($content);

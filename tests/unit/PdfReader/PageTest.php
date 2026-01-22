@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\unit\PdfReader;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfParser\Type\PdfArray;
@@ -17,12 +18,12 @@ use setasign\Fpdi\PdfReader\PageBoundaries;
 
 class PageTest extends TestCase
 {
-
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetAttribute()
     {
         $page = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPageDictionary'])
+            ->onlyMethods(['getPageDictionary'])
             ->getMock();
 
         $dict = PdfDictionary::create([
@@ -37,6 +38,7 @@ class PageTest extends TestCase
         $this->assertNull($page->getAttribute('Anything'));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetAttributeWithInheritance()
     {
         // should be resolved as object 2
@@ -70,19 +72,21 @@ class PageTest extends TestCase
         ]);
 
         $parser = $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $parser->expects($this->exactly(2))
             ->method('getIndirectObject')
-            ->withConsecutive([2], [3])
-            ->willReturnOnConsecutiveCalls($pages2, $pages3);
+            ->willReturnMap([
+                [2, false, $pages2],
+                [3, false, $pages3],
+            ]);
 
         $object = PdfIndirectObject::create(1, 0, $dict);
 
         $page = $this->getMockBuilder(Page::class)
-            ->setMethods(['getPageDictionary'])
+            ->onlyMethods(['getPageDictionary'])
             ->setConstructorArgs([$object, $parser])
             ->getMock();
 
@@ -101,7 +105,7 @@ class PageTest extends TestCase
     private function getPageMock($dict, &$parser = null)
     {
         $parser = $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -109,7 +113,7 @@ class PageTest extends TestCase
 
         $page = $this->getMockBuilder(Page::class)
             ->setConstructorArgs([$object, $parser])
-            ->setMethods(['getPageDictionary'])
+            ->onlyMethods(['getPageDictionary'])
             ->getMock();
 
         $page->expects($this->any())
@@ -119,6 +123,7 @@ class PageTest extends TestCase
         return $page;
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetRotationDefaultValue()
     {
         $dict = PdfDictionary::create([]);
@@ -127,6 +132,7 @@ class PageTest extends TestCase
         $this->assertEquals(0, $page->getRotation());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetRotation()
     {
         $dict = PdfDictionary::create([
@@ -137,6 +143,7 @@ class PageTest extends TestCase
         $this->assertEquals(90, $page->getRotation());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetRotationReferencedValue()
     {
         $value = PdfNumeric::create(-90);
@@ -153,6 +160,7 @@ class PageTest extends TestCase
         $this->assertEquals(270, $page->getRotation());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetBoundary()
     {
         $dict = PdfDictionary::create([
@@ -185,6 +193,7 @@ class PageTest extends TestCase
         $this->assertEquals($cropBox, $page->getBoundary(PageBoundaries::BLEED_BOX));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetContentStreamWithASingleStream()
     {
         // object number 1
@@ -208,6 +217,7 @@ class PageTest extends TestCase
         $this->assertSame($content, $page->getContentStream());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetContentStreamWithSeveralStreams()
     {
         // object number 1
@@ -234,8 +244,10 @@ class PageTest extends TestCase
         $page = $this->getPageMock($dict, $parser);
         $parser->expects($this->exactly(2))
             ->method('getIndirectObject')
-            ->withConsecutive([1], [2])
-            ->willReturnOnConsecutiveCalls($object1, $object2);
+            ->willReturnMap([
+                [1, false, $object1],
+                [2, false, $object2],
+            ]);
 
         $this->assertSame($content1 . "\n" . $content2, $page->getContentStream());
     }

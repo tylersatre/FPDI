@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\unit\PdfParser\Type;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\Type\PdfNumeric;
 use setasign\Fpdi\PdfParser\Type\PdfString;
@@ -9,7 +10,7 @@ use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 
 class PdfNumericTest extends TestCase
 {
-    public function parseProvider()
+    public static function parseProvider()
     {
         $data = [
             [
@@ -71,11 +72,7 @@ class PdfNumericTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $in
-     * @param $expectedResult
-     * @dataProvider parseProvider
-     */
+    #[DataProvider('parseProvider')]
     public function testCreate($in, $expectedResult)
     {
         $result = PdfNumeric::create($in);

@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\functional\PdfReader;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\PdfParser;
@@ -17,7 +18,7 @@ use setasign\Fpdi\PdfReader\PdfReader;
 
 class PdfReaderTest extends TestCase
 {
-    public function getPageCountProvider()
+    public static function getPageCountProvider()
     {
         $data = [];
         $path = __DIR__ . '/../../_files/pdfs';
@@ -55,11 +56,7 @@ class PdfReaderTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $path
-     * @param $expectedCount
-     * @dataProvider getPageCountProvider
-     */
+    #[DataProvider('getPageCountProvider')]
     public function testGetPageCount($path, $expectedCount)
     {
         $stream = StreamReader::createByFile($path);
@@ -70,7 +67,7 @@ class PdfReaderTest extends TestCase
         $this->assertSame($expectedCount, $pdfReader->getPageCount());
     }
 
-    public function getPageProvider()
+    public static function getPageProvider()
     {
         $data = [];
         $path = __DIR__ . '/../../_files/pdfs';
@@ -416,31 +413,31 @@ class PdfReaderTest extends TestCase
                         ]),
 
                     ])
-                )
-            ],
-            10000 => PdfIndirectObject::create(
-                20000,
-                0,
-                PdfDictionary::create([
-                    'Type' => PdfName::create('Page'),
-                    'MediaBox' => PdfArray::create([
-                        PdfNumeric::create(0),
-                        PdfNumeric::create(0),
-                        PdfNumeric::create(595.28),
-                        PdfNumeric::create(841.89)
-                    ]),
-                    'Resources' => PdfDictionary::create([
-                        'Font' => PdfDictionary::create([
-                            'F1' => PdfIndirectObjectReference::create(1, 0)
-                        ])
-                    ]),
-                    'Parent' => PdfIndirectObjectReference::create(4, 0),
-                    'Contents' => PdfArray::create([
-                        PdfIndirectObjectReference::create(20001, 0)
-                    ]),
+                ),
+                10000 => PdfIndirectObject::create(
+                    20002,
+                    0,
+                    PdfDictionary::create([
+                        'Type' => PdfName::create('Page'),
+                        'MediaBox' => PdfArray::create([
+                            PdfNumeric::create(0),
+                            PdfNumeric::create(0),
+                            PdfNumeric::create(595.28),
+                            PdfNumeric::create(841.89)
+                        ]),
+                        'Resources' => PdfDictionary::create([
+                            'Font' => PdfDictionary::create([
+                                'F1' => PdfIndirectObjectReference::create(1, 0)
+                            ])
+                        ]),
+                        'Parent' => PdfIndirectObjectReference::create(4, 0),
+                        'Contents' => PdfArray::create([
+                            PdfIndirectObjectReference::create(20003, 0)
+                        ]),
 
-                ])
-            )
+                    ])
+                )
+            ]
         ];
 
         $data[] = [
@@ -1007,11 +1004,7 @@ class PdfReaderTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $path
-     * @param array $expectedResults
-     * @dataProvider getPageProvider
-     */
+    #[DataProvider('getPageProvider')]
     public function testGetPage($path, array $expectedResults)
     {
         $stream = StreamReader::createByFile($path);

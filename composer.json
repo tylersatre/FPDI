@@ -15,7 +15,7 @@
         }
     },
     "require": {
-        "php": "^7.1 || ^8.0",
+        "php": "^8.4",
         "ext-zlib": "*"
     },
     "conflict": {
@@ -37,15 +37,21 @@
         "setasign/fpdf": "FPDI will extend this class but as it is also possible to use TCPDF or tFPDF as an alternative. There's no fixed dependency configured."
     },
     "require-dev": {
-        "phpunit/phpunit": "^7",
+        "phpunit/phpunit": "^12.0.0",
         "setasign/fpdf": "~1.8.6",
         "tecnickcom/tcpdf": "^6.8",
         "setasign/tfpdf": "~1.33",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpstan/phpstan": "^2.0"
     },
     "autoload-dev": {
         "psr-4": {
             "setasign\\Fpdi\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "cs": "phpcs src/",
+        "analyse": "phpstan analyse --no-progress --memory-limit=512M"
     }
 }

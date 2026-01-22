@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\functional;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\Type\PdfArray;
@@ -96,7 +97,7 @@ class FpdiTraitTest extends TestCase
         $pdf->getTemplateSize($pdf->importPage(1), null, 0);
     }
 
-    public function setSourceFileProvider()
+    public static function setSourceFileProvider()
     {
         $data = [];
         $path = __DIR__ . '/../_files/pdfs';
@@ -129,11 +130,7 @@ class FpdiTraitTest extends TestCase
         return $data;
     }
 
-    /**
-     * @param $path
-     * @param $expectedCount
-     * @dataProvider setSourceFileProvider
-     */
+    #[DataProvider('setSourceFileProvider')]
     public function testSetSourceFile($path, $expectedCount)
     {
         $pdf = new Fpdi();
@@ -158,7 +155,7 @@ class FpdiTraitTest extends TestCase
         $pdf->importPage(1, 'CropsBox');
     }
 
-    public function faultyStructuresProvider()
+    public static function faultyStructuresProvider()
     {
         return [
             [__DIR__ . '/../_files/pdfs/specials/NoContentsEntry.pdf'],
@@ -168,11 +165,7 @@ class FpdiTraitTest extends TestCase
         ];
     }
 
-    /**
-     * @param $path
-     * @param $pageNo
-     * @dataProvider faultyStructuresProvider
-     */
+    #[DataProvider('faultyStructuresProvider')]
     public function testFaultyStructures($path, $pageNo = 1)
     {
         $pdf = new Fpdi();
@@ -182,7 +175,7 @@ class FpdiTraitTest extends TestCase
         $this->assertTrue(isset($id));
     }
 
-    public function writePdfTypeProvider()
+    public static function writePdfTypeProvider()
     {
         return [
             [
@@ -322,12 +315,7 @@ class FpdiTraitTest extends TestCase
         ];
     }
 
-    /**
-     * @param $value
-     * @param $expected
-     * @return void
-     * @dataProvider writePdfTypeProvider
-     */
+    #[DataProvider('writePdfTypeProvider')]
     public function testWritePdfType($value, $expected)
     {
         $instance = new FpdiTraitTestClass();

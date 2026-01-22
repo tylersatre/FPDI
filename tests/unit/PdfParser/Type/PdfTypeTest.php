@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\unit\PdfParser\Type;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfParser\PdfParserException;
@@ -12,6 +13,7 @@ use setasign\Fpdi\PdfParser\Type\PdfType;
 
 class PdfTypeTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testEnsureWithNonObjectValue()
     {
         $pdfParser = $this->createMock(PdfParser::class);
@@ -22,6 +24,7 @@ class PdfTypeTest extends TestCase
         $this->assertSame($value, $result);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testResolveWithIndirectObject()
     {
         $pdfParser = $this->createMock(PdfParser::class);
@@ -44,7 +47,7 @@ class PdfTypeTest extends TestCase
 
         $mock = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->getMock();
 
         $mock->expects($this->once())
@@ -75,13 +78,15 @@ class PdfTypeTest extends TestCase
 
         $mock = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->getMock();
 
         $mock->expects($this->exactly(2))
             ->method('getIndirectObject')
-            ->withConsecutive([13], [12])
-            ->willReturnOnConsecutiveCalls($indirectObject1, $indirectObject2);
+            ->willReturnMap([
+                [13, false, $indirectObject1],
+                [12, false, $indirectObject2],
+            ]);
 
         $value = PdfIndirectObjectReference::create(13, 0);
         $result = PdfType::resolve($value, $mock);
@@ -106,13 +111,13 @@ class PdfTypeTest extends TestCase
 
         $mock = $this->getMockBuilder(PdfParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIndirectObject'])
+            ->onlyMethods(['getIndirectObject'])
             ->getMock();
 
         $mock->expects($this->exactly(1))
             ->method('getIndirectObject')
-            ->withConsecutive([13])
-            ->willReturnOnConsecutiveCalls($indirectObject1);
+            ->with(13)
+            ->willReturn($indirectObject1);
 
         $value = PdfIndirectObjectReference::create(13, 0);
         $result = PdfType::resolve($value, $mock, true);
@@ -120,11 +125,12 @@ class PdfTypeTest extends TestCase
         $this->assertSame($indirectObject1, $result);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testResolveWithRecursiveReferences()
     {
         $parser = (
             $this->getMockBuilder(PdfParser::class)
-            ->setMethods(['getCatalog', 'getIndirectObject'])
+            ->onlyMethods(['getCatalog', 'getIndirectObject'])
             ->disableOriginalConstructor()
             ->getMock()
         );
