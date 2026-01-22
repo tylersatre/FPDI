@@ -304,7 +304,7 @@ trait FpdfTplTrait
         if ($fontKey) {
             $this->CurrentFont = $this->fonts[$fontKey];
         } else {
-            unset($this->CurrentFont);
+            unset($this->CurrentFont); // @phpstan-ignore unset.possiblyHookedProperty (FPDF/tFPDF/TCPDF don't use property hooks)
         }
 
         $this->currentTemplateId = null;

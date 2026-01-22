@@ -15,7 +15,7 @@
         }
     },
     "require": {
-        "php": "^7.1 || ^8.2",
+        "php": "^8.4",
         "ext-zlib": "*"
     },
     "conflict": {
@@ -41,11 +41,17 @@
         "setasign/fpdf": "~1.8.6",
         "tecnickcom/tcpdf": "^6.8",
         "setasign/tfpdf": "~1.33",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpstan/phpstan": "^2.0"
     },
     "autoload-dev": {
         "psr-4": {
             "setasign\\Fpdi\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "cs": "phpcs src/",
+        "analyse": "phpstan analyse --no-progress --memory-limit=512M"
     }
 }
