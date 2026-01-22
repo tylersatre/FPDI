@@ -19,7 +19,6 @@ class TcpdfTest extends \setasign\Fpdi\functional\LinkHandling\AbstractTest
 
         $ref = new ReflectionClass($pdf);
         $prop = $ref->getProperty('tcpdflink');
-        $prop->setAccessible(true);
         $prop->setValue($pdf, false);
 
         return $pdf;

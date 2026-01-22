@@ -413,31 +413,31 @@ class PdfReaderTest extends TestCase
                         ]),
 
                     ])
-                )
-            ],
-            10000 => PdfIndirectObject::create(
-                20000,
-                0,
-                PdfDictionary::create([
-                    'Type' => PdfName::create('Page'),
-                    'MediaBox' => PdfArray::create([
-                        PdfNumeric::create(0),
-                        PdfNumeric::create(0),
-                        PdfNumeric::create(595.28),
-                        PdfNumeric::create(841.89)
-                    ]),
-                    'Resources' => PdfDictionary::create([
-                        'Font' => PdfDictionary::create([
-                            'F1' => PdfIndirectObjectReference::create(1, 0)
-                        ])
-                    ]),
-                    'Parent' => PdfIndirectObjectReference::create(4, 0),
-                    'Contents' => PdfArray::create([
-                        PdfIndirectObjectReference::create(20001, 0)
-                    ]),
+                ),
+                10000 => PdfIndirectObject::create(
+                    20002,
+                    0,
+                    PdfDictionary::create([
+                        'Type' => PdfName::create('Page'),
+                        'MediaBox' => PdfArray::create([
+                            PdfNumeric::create(0),
+                            PdfNumeric::create(0),
+                            PdfNumeric::create(595.28),
+                            PdfNumeric::create(841.89)
+                        ]),
+                        'Resources' => PdfDictionary::create([
+                            'Font' => PdfDictionary::create([
+                                'F1' => PdfIndirectObjectReference::create(1, 0)
+                            ])
+                        ]),
+                        'Parent' => PdfIndirectObjectReference::create(4, 0),
+                        'Contents' => PdfArray::create([
+                            PdfIndirectObjectReference::create(20003, 0)
+                        ]),
 
-                ])
-            )
+                    ])
+                )
+            ]
         ];
 
         $data[] = [

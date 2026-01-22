@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\unit\PdfReader\DataStructure;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReference;
@@ -71,6 +72,7 @@ class RectangleTest extends TestCase
         $this->assertSame($expectedArray, $rect->toArray());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testByPdfArray()
     {
         $pdfArray = PdfArray::create([

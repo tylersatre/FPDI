@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace setasign\Fpdi\unit\PdfReader;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfParser\Type\PdfArray;
@@ -17,6 +18,7 @@ use setasign\Fpdi\PdfReader\PdfReaderException;
 
 class PdfReaderTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandlingOfRecursivePageTreeStructure()
     {
         $parser = (
@@ -57,6 +59,7 @@ class PdfReaderTest extends TestCase
         $pdfReader->getPage(1);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testHandlingOfRecursivePageTreeStructureWhenFullTreeIsRead()
     {
         $parser = (

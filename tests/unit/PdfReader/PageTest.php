@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\unit\PdfReader;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfParser\Type\PdfArray;
@@ -17,7 +18,7 @@ use setasign\Fpdi\PdfReader\PageBoundaries;
 
 class PageTest extends TestCase
 {
-
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetAttribute()
     {
         $page = $this->getMockBuilder(Page::class)
@@ -37,6 +38,7 @@ class PageTest extends TestCase
         $this->assertNull($page->getAttribute('Anything'));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetAttributeWithInheritance()
     {
         // should be resolved as object 2
@@ -121,6 +123,7 @@ class PageTest extends TestCase
         return $page;
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetRotationDefaultValue()
     {
         $dict = PdfDictionary::create([]);
@@ -129,6 +132,7 @@ class PageTest extends TestCase
         $this->assertEquals(0, $page->getRotation());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetRotation()
     {
         $dict = PdfDictionary::create([
@@ -139,6 +143,7 @@ class PageTest extends TestCase
         $this->assertEquals(90, $page->getRotation());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetRotationReferencedValue()
     {
         $value = PdfNumeric::create(-90);
@@ -155,6 +160,7 @@ class PageTest extends TestCase
         $this->assertEquals(270, $page->getRotation());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetBoundary()
     {
         $dict = PdfDictionary::create([
@@ -187,6 +193,7 @@ class PageTest extends TestCase
         $this->assertEquals($cropBox, $page->getBoundary(PageBoundaries::BLEED_BOX));
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetContentStreamWithASingleStream()
     {
         // object number 1
@@ -210,6 +217,7 @@ class PageTest extends TestCase
         $this->assertSame($content, $page->getContentStream());
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetContentStreamWithSeveralStreams()
     {
         // object number 1

@@ -105,8 +105,7 @@ class LineReaderTest extends TestCase
                 8 => [7000, 0],
                 9 => [8000, 0],
                 10 => [9000, 0],
-            ],
-            10
+            ]
         ];
 
         $data[] = [

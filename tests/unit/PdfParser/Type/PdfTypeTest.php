@@ -2,6 +2,7 @@
 
 namespace setasign\Fpdi\unit\PdfParser\Type;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\TestCase;
 use setasign\Fpdi\PdfParser\PdfParser;
 use setasign\Fpdi\PdfParser\PdfParserException;
@@ -12,6 +13,7 @@ use setasign\Fpdi\PdfParser\Type\PdfType;
 
 class PdfTypeTest extends TestCase
 {
+    #[AllowMockObjectsWithoutExpectations]
     public function testEnsureWithNonObjectValue()
     {
         $pdfParser = $this->createMock(PdfParser::class);
@@ -22,6 +24,7 @@ class PdfTypeTest extends TestCase
         $this->assertSame($value, $result);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testResolveWithIndirectObject()
     {
         $pdfParser = $this->createMock(PdfParser::class);
@@ -122,6 +125,7 @@ class PdfTypeTest extends TestCase
         $this->assertSame($indirectObject1, $result);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testResolveWithRecursiveReferences()
     {
         $parser = (

@@ -623,18 +623,19 @@ trait FpdiTrait
             $this->_put($value->getStream());
             $this->_put('endstream');
         } elseif ($value instanceof PdfIndirectObjectReference) {
-            if (!isset($this->objectMap[$this->currentReaderId])) {
-                $this->objectMap[$this->currentReaderId] = [];
+            $readerId = $this->currentReaderId ?? '';
+            if (!isset($this->objectMap[$readerId])) {
+                $this->objectMap[$readerId] = [];
             }
 
-            if (!isset($this->objectMap[$this->currentReaderId][$value->value])) {
-                $this->objectMap[$this->currentReaderId][$value->value] = ++$this->n;
-                $this->objectsToCopy[$this->currentReaderId][] = $value->value;
+            if (!isset($this->objectMap[$readerId][$value->value])) {
+                $this->objectMap[$readerId][$value->value] = ++$this->n;
+                $this->objectsToCopy[$readerId][] = $value->value;
             }
 
-            $this->_put($this->objectMap[$this->currentReaderId][$value->value] . ' 0 R ', false);
+            $this->_put($this->objectMap[$readerId][$value->value] . ' 0 R ', false);
         } elseif ($value instanceof PdfIndirectObject) {
-            $n = $this->objectMap[$this->currentReaderId][$value->objectNumber];
+            $n = $this->objectMap[$this->currentReaderId ?? ''][$value->objectNumber];
             $this->_newobj($n);
             $this->writePdfType($value->value);
 
