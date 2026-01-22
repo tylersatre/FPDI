@@ -1,44 +1,45 @@
 name: Code Style
+
 on: [pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   phpcs:
     name: phpcs
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code into the workspace
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install php
+      - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.1"
+          php-version: "8.4"
+          tools: cs2pr
 
       - name: Install dependencies
-        run: composer update --dev --no-interaction --prefer-dist --no-progress --no-suggest --ansi
+        uses: ramsey/composer-install@v3
 
       - name: PHPCS check
-        uses: chekalsky/phpcs-action@v1
-        with:
-          phpcs_bin_path: './vendor/bin/phpcs'
-          enable_warnings: true
+        run: ./vendor/bin/phpcs -q --report=checkstyle src | cs2pr
 
   phpstan:
     name: phpstan
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code into the workspace
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Install php
+      - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.4"
+          php-version: "8.4"
 
       - name: Install dependencies
-        run: composer update --dev --no-interaction --prefer-dist --no-progress --no-suggest --ansi
-
-      - name: Require phpstan
-        run: composer require --dev phpstan/phpstan --no-interaction
+        uses: ramsey/composer-install@v3
 
       - name: Run phpstan
-        run: php ./vendor/phpstan/phpstan/phpstan.phar analyse --no-progress
+        run: composer analyse
